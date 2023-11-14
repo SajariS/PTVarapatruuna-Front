@@ -9,25 +9,23 @@ import AppBar from '@mui/material/AppBar';
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-material.css";
 
-function CustomerList() {
-    const [customers, setCustomers] = useState([]);
+export default function TrainingList() {
+    const [sessions, setSessions] = useState([]);
 
     useEffect(() => {
-        fetchCustomers();
+        fetchTraining();
     }, []);
 
     const [columnDefs] = useState([
-        {field: 'firstname', sortable: true, filter: true},
-        {field: 'lastname', sortable: true, filter: true},
-        {field: 'streetaddress', sortable: true, filter: true},
-        {field: 'postcode', sortable: true, filter: true},
-        {field: 'city', sortable: true, filter: true},
-        {field: 'email', sortable: true, filter: true},
-        {field: 'phone', sortable: true, filter: true}
-    ]);
+        {field: 'activity', sortable: true, filter: true},
+        {field: 'duration', sortable: true, filter: true},
+        {field: 'customer.lastname', headerName: 'customer', sortable: true, filter: true},
+        {field: 'date', cellDataType: 'date', sortable: true, filter: true}
 
-    const fetchCustomers = () => {
-        fetch('http://traineeapp.azurewebsites.net/api/customers')
+    ])
+
+    const fetchTraining= () => {
+        fetch('https://traineeapp.azurewebsites.net/gettrainings')
         .then(response => {
             if(response.ok) {
                 return response.json();
@@ -36,27 +34,25 @@ function CustomerList() {
                 throw new Error("Error in fetch:" + response.statusText);
             }
         })
-        .then(data => setCustomers(data.content))
+        .then(data => setSessions(data))
         .catch(err => console.error(err))
     }
 
     return(
         <Container maxWidth="lg">
-            <AppBar position='static'>
+            <AppBar position="static">
                 <Toolbar>
-                    <Typography variant="h6">Customers</Typography>
+                    <Typography variant="h6">Trainings</Typography>
                 </Toolbar>
             </AppBar>
             <div className="ag-theme-material" style={{ width: '100%', height: 600}}>
                 <AgGridReact
-                rowData={customers}
+                rowData={sessions}
                 columnDefs={columnDefs}
                 pagination={true}
                 paginationAutoPageSize={true}
                 />
             </div>
         </Container>
-    );
+    )
 }
-
-export default CustomerList;
