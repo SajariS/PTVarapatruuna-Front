@@ -5,6 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import AppBar from '@mui/material/AppBar';
+import dayjs from 'dayjs';
 
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-material.css";
@@ -20,7 +21,7 @@ export default function TrainingList() {
         {field: 'activity', sortable: true, filter: true},
         {field: 'duration', sortable: true, filter: true},
         {field: 'customer.lastname', headerName: 'customer', sortable: true, filter: true},
-        {field: 'date', cellDataType: 'date', sortable: true, filter: true}
+        {field: 'date', sortable: true, filter: true}
 
     ])
 
@@ -34,7 +35,12 @@ export default function TrainingList() {
                 throw new Error("Error in fetch:" + response.statusText);
             }
         })
-        .then(data => setSessions(data))
+        .then(data => {
+            data.forEach(training => {
+                training.date = dayjs(training.date).format('DD.MM.YYYY HH:mm');
+            });
+            setSessions(data);
+        })
         .catch(err => console.error(err))
     }
 
