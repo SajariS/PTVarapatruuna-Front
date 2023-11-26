@@ -4,6 +4,9 @@ import Tab from '@mui/material/Tab';
 
 import CustomerList from './CustomerList';
 import TrainingList from './TrainingList';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import "dayjs/locale/fi";
 
 function TabApp() {
     const [tab, setTab] = useState('trainings');
@@ -13,14 +16,14 @@ function TabApp() {
     }
 
     return(
-        <>
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fi">
             <Tabs value={tab} onChange={handleChange}>
                 <Tab value="trainings" label="Trainings" />
                 <Tab value="customers" label="Customers" />
             </Tabs>
             {tab === 'trainings' && <TrainingList />}
             {tab === 'customers' && <CustomerList />}
-        </>
+        </LocalizationProvider>
     )
 }
 

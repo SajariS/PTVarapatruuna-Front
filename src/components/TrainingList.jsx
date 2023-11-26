@@ -6,6 +6,7 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import AppBar from '@mui/material/AppBar';
 import dayjs from 'dayjs';
+import Button from '@mui/material/Button';
 
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-material.css";
@@ -21,9 +22,15 @@ export default function TrainingList() {
         {field: 'activity', sortable: true, filter: true},
         {field: 'duration', sortable: true, filter: true},
         {field: 'customer.lastname', headerName: 'customer', sortable: true, filter: true},
-        {field: 'date', sortable: true, filter: true}
+        {field: 'date', sortable: true, filter: true},
+        {
+            cellRenderer: params => <Button size="small" onClick={() => deleteTraining(params.data.id)}>
+                Delete
+            </Button>,
+            width: 120
+        }
 
-    ])
+    ]);
 
     const fetchTraining= () => {
         fetch('https://traineeapp.azurewebsites.net/gettrainings')
@@ -42,7 +49,22 @@ export default function TrainingList() {
             setSessions(data);
         })
         .catch(err => console.error(err))
-    }
+    };
+
+    const deleteTraining = (id) => {
+        if (window.confirm("Are you sure?")) {
+            fetch('http://traineeapp.azurewebsites.net/api/trainings/' + id, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if(!response.ok) {
+                    throw new Error("Error in delete: " + response.statusText);
+                }
+                fetchTraining();
+            })
+            .catch(err => console.error(err));
+        }
+    };
 
     return(
         <Container maxWidth="lg">
@@ -60,5 +82,5 @@ export default function TrainingList() {
                 />
             </div>
         </Container>
-    )
+    );
 }

@@ -5,6 +5,11 @@ import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import AppBar from '@mui/material/AppBar';
+import Button from '@mui/material/Button';
+
+import AddCustomer from './AddCustomer';
+import EditCustomer from './EditCustomer';
+import AddTraining from './AddTraining';
 
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-material.css";
@@ -23,7 +28,20 @@ function CustomerList() {
         {field: 'postcode', sortable: true, filter: true},
         {field: 'city', sortable: true, filter: true},
         {field: 'email', sortable: true, filter: true},
-        {field: 'phone', sortable: true, filter: true}
+        {field: 'phone', sortable: true, filter: true},
+        {
+            cellRenderer: params => <AddTraining fetchCustomers={fetchCustomers} data={params.data} />
+        },
+        {
+            cellRenderer: params => <EditCustomer fetchCustomers={fetchCustomers} data={params.data} />,
+            width: 120
+        },
+        {
+            cellRenderer: params => <Button size="small" onClick={() => deleteCustomer(params.data.links[0].href)}>
+                Delete
+            </Button>,
+            width: 120
+        }
     ]);
 
     const fetchCustomers = () => {
@@ -40,6 +58,19 @@ function CustomerList() {
         .catch(err => console.error(err))
     }
 
+    const deleteCustomer = (url) => {
+        if (window.confirm("Are you sure?")) {
+            fetch(url, {method: 'DELETE'})
+            .then(response => {
+                if(!response.ok) {
+                    throw new Error("Error in delete: " + response.statusText);
+                }
+                fetchCustomers();
+            })
+            .catch(err => console.error(err));
+        }
+    }
+
     return(
         <Container maxWidth="lg">
             <AppBar position='static'>
@@ -47,6 +78,7 @@ function CustomerList() {
                     <Typography variant="h6">Customers</Typography>
                 </Toolbar>
             </AppBar>
+            <AddCustomer fetchCustomers={fetchCustomers} />
             <div className="ag-theme-material" style={{ width: '100%', height: 600}}>
                 <AgGridReact
                 rowData={customers}
