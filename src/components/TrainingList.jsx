@@ -13,6 +13,7 @@ import "ag-grid-community/styles/ag-theme-material.css";
 
 export default function TrainingList() {
     const [sessions, setSessions] = useState([]);
+    const url = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         fetchTraining();
@@ -33,7 +34,7 @@ export default function TrainingList() {
     ]);
 
     const fetchTraining= () => {
-        fetch('https://traineeapp.azurewebsites.net/gettrainings')
+        fetch(url + 'gettrainings')
         .then(response => {
             if(response.ok) {
                 return response.json();
@@ -53,7 +54,7 @@ export default function TrainingList() {
 
     const deleteTraining = (id) => {
         if (window.confirm("Are you sure?")) {
-            fetch('http://traineeapp.azurewebsites.net/api/trainings/' + id, {
+            fetch(url + 'api/trainings/' + id, {
                 method: 'DELETE'
             })
             .then(response => {

@@ -18,6 +18,7 @@ export default function AddCustomer({fetchCustomers}) {
         city: ''
     });
     const [open, setOpen] = useState(false);
+    const url = import.meta.env.VITE_API_URL;
 
     const handleOpen = () => {
         setOpen(true);
@@ -32,7 +33,7 @@ export default function AddCustomer({fetchCustomers}) {
     };
 
     const saveCustomer = () => {
-        fetch('https://traineeapp.azurewebsites.net/api/customers', {
+        fetch(url + 'api/customers', {
             method: 'POST',
             headers: { 'Content-type':'application/json'},
             body: JSON.stringify(customer)

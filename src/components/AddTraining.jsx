@@ -14,6 +14,7 @@ export default function AddTraining({fetchCustomers, data}) {
         activity: '',
         customer: data.links[0].href
     });
+    const url = import.meta.env.VITE_API_URL;
 
     const [open, setOpen] = useState(false);
 
@@ -39,7 +40,7 @@ export default function AddTraining({fetchCustomers, data}) {
 
     const saveTraining = () => {
         formatDate();
-        fetch('https://traineeapp.azurewebsites.net/api/trainings', {
+        fetch(url + 'api/trainings', {
             method: 'POST',
             headers: { 'Content-type':'application/json'},
             body: JSON.stringify(training)

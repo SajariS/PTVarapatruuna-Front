@@ -7,13 +7,14 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 export default function TrainingCalendar() {
     const [events, setEvents ] = useState([]);
     const localizer = dayjsLocalizer(dayjs);
+    const url = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         fetchTraining();
     }, [])
 
     const fetchTraining= () => {
-        fetch('https://traineeapp.azurewebsites.net/gettrainings')
+        fetch(url + 'gettrainings')
         .then(response => {
             if(response.ok) {
                 return response.json();
@@ -27,7 +28,6 @@ export default function TrainingCalendar() {
             data.forEach(training => {
                 if(training.customer !== null) {
                     const startDate = dayjs(training.date);
-                    console.log(startDate);
                     const endDate = startDate.add(training.duration, 'minute');
                     const customer = training.customer.firstname;
                     const event = {
