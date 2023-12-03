@@ -20,6 +20,7 @@ function CustomerList() {
     useEffect(() => {
         fetchCustomers();
     }, []);
+    const url = import.meta.env.VITE_API_URL;
 
     const [columnDefs] = useState([
         {field: 'firstname', sortable: true, filter: true},
@@ -45,7 +46,7 @@ function CustomerList() {
     ]);
 
     const fetchCustomers = () => {
-        fetch('http://traineeapp.azurewebsites.net/api/customers')
+        fetch(url + 'api/customers')
         .then(response => {
             if(response.ok) {
                 return response.json();
@@ -58,9 +59,9 @@ function CustomerList() {
         .catch(err => console.error(err))
     }
 
-    const deleteCustomer = (url) => {
+    const deleteCustomer = (apiUrl) => {
         if (window.confirm("Are you sure?")) {
-            fetch(url, {method: 'DELETE'})
+            fetch(apiUrl, {method: 'DELETE'})
             .then(response => {
                 if(!response.ok) {
                     throw new Error("Error in delete: " + response.statusText);
