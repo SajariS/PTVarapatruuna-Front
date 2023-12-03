@@ -51,7 +51,7 @@ export default function AddCustomer({fetchCustomers}) {
 
     return(
         <div>
-            <Button variant='outlined' onClick={handleOpen}>
+            <Button variant='contained' color="success" onClick={handleOpen}>
                 Add customer
             </Button>
             <Dialog open={open} onClose={handleClose}>

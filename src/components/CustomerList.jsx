@@ -6,6 +6,7 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
+import Grid from '@mui/material/Unstable_Grid2';
 
 import AddCustomer from './AddCustomer';
 import EditCustomer from './EditCustomer';
@@ -23,25 +24,26 @@ function CustomerList() {
     const url = import.meta.env.VITE_API_URL;
 
     const [columnDefs] = useState([
-        {field: 'firstname', sortable: true, filter: true},
-        {field: 'lastname', sortable: true, filter: true},
-        {field: 'streetaddress', sortable: true, filter: true},
-        {field: 'postcode', sortable: true, filter: true},
-        {field: 'city', sortable: true, filter: true},
-        {field: 'email', sortable: true, filter: true},
-        {field: 'phone', sortable: true, filter: true},
+        {field: 'firstname', sortable: true, filter: true, width: 170},
+        {field: 'lastname', sortable: true, filter: true, width: 170},
+        {field: 'streetaddress', sortable: true, filter: true, width: 180},
+        {field: 'postcode', sortable: true, filter: true, width: 120},
+        {field: 'city', sortable: true, filter: true, width: 150},
+        {field: 'email', sortable: true, filter: true, width: 200},
+        {field: 'phone', sortable: true, filter: true, width: 125},
         {
-            cellRenderer: params => <AddTraining fetchCustomers={fetchCustomers} data={params.data} />
+            cellRenderer: params => <AddTraining fetchCustomers={fetchCustomers} data={params.data} />,
+            width: 130
         },
         {
             cellRenderer: params => <EditCustomer fetchCustomers={fetchCustomers} data={params.data} />,
-            width: 120
+            width: 110
         },
         {
             cellRenderer: params => <Button size="small" onClick={() => deleteCustomer(params.data.links[0].href)}>
                 Delete
             </Button>,
-            width: 120
+            width: 115
         }
     ]);
 
@@ -83,14 +85,16 @@ function CustomerList() {
     }
 
     return(
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
             <AppBar position='static'>
                 <Toolbar>
                     <Typography variant="h6">Customers</Typography>
                 </Toolbar>
             </AppBar>
-            <AddCustomer fetchCustomers={fetchCustomers} />
-            <Button onClick={handleExport}>Export data</Button>
+            <Grid container spacing={-2}>
+                <AddCustomer fetchCustomers={fetchCustomers} />
+                <Button variant="contained" color="secondary" onClick={handleExport}>Export data</Button>
+            </Grid>
             <div className="ag-theme-material" style={{ width: '100%', height: 600}}>
                 <AgGridReact
                 ref={gridRef}

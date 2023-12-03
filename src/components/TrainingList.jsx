@@ -22,7 +22,8 @@ export default function TrainingList() {
     const [columnDefs] = useState([
         {field: 'activity', sortable: true, filter: true},
         {field: 'duration', sortable: true, filter: true},
-        {field: 'customer.lastname', headerName: 'customer', sortable: true, filter: true},
+        {field: 'customer.firstname', headerName: 'customer firstname', sortable: true, filter: true},
+        {field: 'customer.lastname', headerName: 'customer lastname', sortable: true, filter: true},
         {field: 'date', sortable: true, filter: true},
         {
             cellRenderer: params => <Button size="small" onClick={() => deleteTraining(params.data.id)}>
