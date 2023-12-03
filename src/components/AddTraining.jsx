@@ -61,7 +61,7 @@ export default function AddTraining({fetchCustomers, data}) {
                 Add training
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>New customer</DialogTitle>
+                <DialogTitle>Add training</DialogTitle>
                 <TrainingDialog training={training} handleChange={handleChange} handleDateChange={handleDateChange} />
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>

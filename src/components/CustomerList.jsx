@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 
 import Toolbar from '@mui/material/Toolbar';
@@ -16,7 +16,7 @@ import "ag-grid-community/styles/ag-theme-material.css";
 
 function CustomerList() {
     const [customers, setCustomers] = useState([]);
-
+    const gridRef = useRef();
     useEffect(() => {
         fetchCustomers();
     }, []);
@@ -71,6 +71,16 @@ function CustomerList() {
         }
     }
 
+    const handleExport = () => {
+        const exportableColumns = columnDefs.filter(column => !column.cellRenderer);
+        const params = {
+            fileName: 'customers.csv',
+            columnKeys: exportableColumns.map(column => column.field)
+            };
+
+        gridRef.current.api.exportDataAsCsv(params);
+    }
+
     return(
         <Container maxWidth="lg">
             <AppBar position='static'>
@@ -79,8 +89,10 @@ function CustomerList() {
                 </Toolbar>
             </AppBar>
             <AddCustomer fetchCustomers={fetchCustomers} />
+            <Button onClick={handleExport}>Export data</Button>
             <div className="ag-theme-material" style={{ width: '100%', height: 600}}>
                 <AgGridReact
+                ref={gridRef}
                 rowData={customers}
                 columnDefs={columnDefs}
                 pagination={true}
